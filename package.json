@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "start": "npm t",
+    "test": "ts-node tests/index.ts",
+    "check-format": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@notionhq/client": "^2.2.15",
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
+    "@types/baretest": "^2.0.0",
+    "baretest": "^2.0.0",
+    "dotenv": "^16.3.1",
+    "prettier": "2.8.4",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.3"
+  }
+}
