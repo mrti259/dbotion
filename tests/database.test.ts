@@ -25,22 +25,19 @@ test.before(async () => {
 });
 
 test('Query empty database', async () => {
-    const results = await queryAll();
-    assert(results.length === 0);
+    await expected(0);
 });
 
 test('Create page', async () => {
     await create(model);
-    const results = await queryAll();
-    assert(results.length === 1);
 
+    const results = await expected(1);
     const { id, ...createdPage } = results[0];
     assert.deepEqual(createdPage, model);
 });
 
 test('Delete page', async () => {
-    const results = await queryAll();
-    assert(results.length === 0);
+    await expected(0);
 });
 
 test('Update page', async () => {
@@ -51,9 +48,8 @@ test('Update page', async () => {
             name: 'Updated',
         },
     ]);
-    const results = await queryAll();
-    assert(results.length === 1);
 
+    const results = await expected(1);
     const { id, ...updatePage } = results[0];
     assert.notDeepEqual(updatePage, model);
 });
@@ -70,5 +66,11 @@ function create(obj: Model) {
 async function deleteAll() {
     const results = await queryAll();
     return await database.delete(results);
+}
+
+async function expected(anAmountExpected: number) {
+    const results = await queryAll();
+    assert.equal(results.length, anAmountExpected);
+    return results;
 }
 //#endregion

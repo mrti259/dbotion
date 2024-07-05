@@ -1,4 +1,4 @@
-all: install test
+all: install test format
 
 install:
 	npm install
