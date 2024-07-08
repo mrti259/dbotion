@@ -1,11 +1,11 @@
-import { Client } from '@notionhq/client';
-import {
+import { type Client, collectPaginatedAPI, isFullPage } from '@notionhq/client';
+import type {
     PageObjectResponse,
     QueryDatabaseParameters,
 } from '@notionhq/client/build/src/api-endpoints';
 
-import { Schema } from './schema';
-import { Identificable, SearchParameters } from './types';
+import type { Schema } from './schema';
+import type { Identificable, SearchParameters } from './types';
 
 type Page = PageObjectResponse;
 
@@ -33,58 +33,56 @@ export class Database<Model> {
             queryParameters['filter'] = filters;
         }
 
-        const response = await this._client.databases.query(queryParameters);
-        const pages = response.results
-            .map((result) => result as Page)
-            .filter((p) => p.object === 'page');
+        const response = await collectPaginatedAPI(
+            this._client.databases.query,
+            queryParameters,
+        );
+        const pages = response.filter(isFullPage);
 
         return this._mapPages(pages);
     }
 
     async create(models: Array<Model>): Promise<Array<Identificable<Model>>> {
         const pages = await Promise.all(
-            models.map(async (model) => {
-                const response = await this._client.pages.create({
+            models.map((model) =>
+                this._client.pages.create({
                     parent: { database_id: this._databaseId },
                     properties: this._schema.getPropertiesFrom(
                         model,
                     ) as Page['properties'],
-                });
-                return response as Page;
-            }),
+                }),
+            ),
         );
 
-        return this._mapPages(pages);
+        return this._mapPages(pages.filter(isFullPage));
     }
 
     async update(
         models: Array<Identificable<Model>>,
     ): Promise<Array<Identificable<Model>>> {
         const pages = await Promise.all(
-            models.map(async (model) => {
-                const response = await this._client.pages.update({
+            models.map((model) =>
+                this._client.pages.update({
                     page_id: model.id,
                     properties: this._schema.getPropertiesFrom(
                         model,
                     ) as Page['properties'],
-                });
-                return response as Page;
-            }),
+                }),
+            ),
         );
 
-        return this._mapPages(pages);
+        return this._mapPages(pages.filter(isFullPage));
     }
 
     async delete(
         models: Array<Identificable<Model>>,
     ): Promise<Array<Identificable<{}>>> {
         const blocks = await Promise.all(
-            models.map(async (model) => {
-                const response = this._client.blocks.delete({
+            models.map((model) =>
+                this._client.blocks.delete({
                     block_id: model.id,
-                });
-                return response;
-            }),
+                }),
+            ),
         );
 
         return blocks.map((block) => ({ id: block.id }));

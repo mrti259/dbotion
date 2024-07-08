@@ -1,7 +1,12 @@
-import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 
-import Property from './properties/Property';
-import { Filter, Identificable, PageProperty, SearchParameters } from './types';
+import type Property from './properties/Property';
+import type {
+    Filter,
+    Identificable,
+    PageProperty,
+    SearchParameters,
+} from './types';
 
 type Properties = {
     [name: string]: PageProperty;

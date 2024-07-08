@@ -1,4 +1,4 @@
-import { Filter, PageProperty } from '../types';
+import type { Filter, PageProperty } from '../types';
 import Property from './Property';
 
 export default class RelationWithManyProperty extends Property<Array<string>> {

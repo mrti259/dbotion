@@ -1,4 +1,4 @@
-import { Filter, PageProperty } from '../types';
+import type { Filter, PageProperty } from '../types';
 
 export default abstract class Property<TValue> {
     constructor(public name: string) {}
