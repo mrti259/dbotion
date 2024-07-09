@@ -1,16 +1,29 @@
 {
+  "name": "dbotion",
+  "version": "0.0.7",
+  "main": "./build/src",
+  "files": [
+    "build/package.json",
+    "build/src/**"
+  ],
   "scripts": {
-    "start": "npm t",
-    "test": "ts-node tests/index.ts",
-    "check-format": "prettier --check .",
-    "format": "prettier --write ."
+    "test": "ts-node test/index.ts",
+    "prepare": "yarn build",
+    "prebuild": "yarn clean",
+    "build": "tsc",
+    "postbuild": "cp package.json build",
+    "prettier": "prettier --write .",
+    "lint": "prettier --check . && eslint . --ext .ts && cspell '**/*' ",
+    "clean": "rm -rf ./build"
   },
   "devDependencies": {
     "@notionhq/client": "^2.2.15",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/baretest": "^2.0.0",
     "baretest": "^2.0.0",
+    "cspell": "^8.10.4",
     "dotenv": "^16.3.1",
+    "eslint": "^9.6.0",
     "prettier": "2.8.4",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.3"

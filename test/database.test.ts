@@ -32,7 +32,7 @@ test('Create page', async () => {
     await create(model);
 
     const results = await expect(1);
-    const { id, ...createdPage } = results[0];
+    const { id, ...createdPage } = results[0]!;
     assert.deepEqual(createdPage, model);
 });
 
@@ -44,13 +44,13 @@ test('Update page', async () => {
     const [createdPage] = await create(model);
     await database.update([
         {
-            ...createdPage,
+            ...createdPage!,
             name: 'Updated',
         },
     ]);
 
     const results = await expect(1);
-    const { id, ...updatedPage } = results[0];
+    const { id, ...updatedPage } = results[0]!;
     assert.notDeepEqual(updatedPage, model);
 });
 

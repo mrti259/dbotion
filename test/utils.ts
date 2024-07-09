@@ -1,19 +1,20 @@
-import assert from 'assert';
-import baretest from 'baretest';
+import assert = require('assert');
+import baretest = require('baretest');
 
 type TestFunction = ReturnType<typeof baretest>;
 type SkippedTestFunction = TestFunction['skip'];
+type TestSuite = [TestFunction, SkippedTestFunction];
 
 const tests: Array<TestFunction> = [];
 let skipped = 0;
 
-function createTestSuite(name: string) {
+function createTestSuite(name: string): TestSuite {
     const test = baretest(name);
     const skip: SkippedTestFunction = () => {
         skipped++;
     };
     tests.push(test);
-    return [test, skip] as const;
+    return [test, skip];
 }
 
 async function runTests() {

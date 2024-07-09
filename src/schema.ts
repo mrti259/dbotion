@@ -57,7 +57,7 @@ export class Schema<Model> {
 
         for (const propertyName in this.properties) {
             const property = this.properties[propertyName];
-            const pageProperty = properties[property.name];
+            const pageProperty = properties[property.name]!;
             model[propertyName] = property.mapPageProperty(pageProperty) as any;
         }
 
