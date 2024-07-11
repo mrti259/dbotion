@@ -3,7 +3,9 @@ import type {
     RichTextItemResponse,
 } from '@notionhq/client/build/src/api-endpoints';
 
-export type Identificable<Model> = { id: string } & Model;
+export type Id = string;
+
+export type Identificable<Model> = { id: Id } & Model;
 
 export type SearchParameters<Model> = {
     [Key in keyof Model]?: Array<Model[Key]>;
@@ -21,4 +23,6 @@ export type PageProperty = RecursivePartial<{
     title: Array<RichTextItemResponse>;
     rich_text: Array<RichTextItemResponse>;
     relation: Array<Identificable<void>>;
+    checkbox: boolean;
+    number: number;
 }>;

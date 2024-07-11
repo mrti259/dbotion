@@ -1,6 +1,8 @@
 import type { Filter, PageProperty } from '../types';
 
-export default abstract class Property<TValue> {
+export abstract class Property<TValue> {
+    abstract readonly type: keyof PageProperty;
+
     constructor(public name: string) {}
 
     filter(values: TValue[]): Filter {
@@ -13,4 +15,8 @@ export default abstract class Property<TValue> {
     abstract mapValue(value: TValue): PageProperty;
 
     abstract mapPageProperty(pageProperty: PageProperty): TValue | undefined;
+
+    emptyObject(): unknown {
+        return { [this.type]: {} };
+    }
 }

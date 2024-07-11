@@ -1,21 +1,23 @@
 import type { Filter, PageProperty } from '../types';
-import Property from './Property';
+import { Property } from './property';
 
-export default class RelationWithManyProperty extends Property<Array<string>> {
+export class RelationWithManyProperty extends Property<Array<string>> {
+    readonly type = 'relation';
+
     protected _filter(values: Array<string>): Filter {
         return {
             and: values.map((value) => ({
                 property: this.name,
-                relation: value ? { contains: value } : { is_empty: true },
+                [this.type]: value ? { contains: value } : { is_empty: true },
             })),
         };
     }
 
     mapValue(values: Array<string>): PageProperty {
-        return { relation: values.map((value) => ({ id: value })) };
+        return { [this.type]: values.map((value) => ({ id: value })) };
     }
 
     mapPageProperty(pageProperty: PageProperty): Array<string> | undefined {
-        return pageProperty.relation?.map(({ id }) => id!);
+        return pageProperty[this.type]?.map(({ id }) => id!);
     }
 }

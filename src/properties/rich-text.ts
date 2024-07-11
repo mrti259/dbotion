@@ -1,20 +1,22 @@
 import type { Filter, PageProperty } from '../types';
-import Property from './Property';
+import { Property } from './property';
 
-export default class RichTextProperty extends Property<string> {
+export class RichTextProperty extends Property<string> {
+    readonly type = 'rich_text';
+
     protected _filter(value: string): Filter {
         return {
             property: this.name,
-            rich_text: value ? { equals: value } : { is_empty: true },
+            [this.type]: value ? { equals: value } : { is_empty: true },
         };
     }
 
     mapValue(value: string): PageProperty {
-        return { rich_text: [{ text: { content: value } }] };
+        return { [this.type]: [{ text: { content: value } }] };
     }
 
     mapPageProperty(pageProperty: PageProperty): string | undefined {
-        return pageProperty.rich_text
+        return pageProperty[this.type]
             ?.map(({ plain_text = '', annotations = {} }) => {
                 let text = plain_text;
                 if (annotations.bold) text = `**${text}**`;

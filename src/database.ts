@@ -5,14 +5,14 @@ import type {
 } from '@notionhq/client/build/src/api-endpoints';
 
 import type { Schema } from './schema';
-import type { Identificable, SearchParameters } from './types';
+import type { Id, Identificable, SearchParameters } from './types';
 
 type Page = PageObjectResponse;
 
 export class Database<Model> {
     constructor(
         private _client: Client,
-        private _databaseId: string,
+        private _databaseId: Id,
         private _schema: Schema<Model>,
     ) {}
 
@@ -86,5 +86,12 @@ export class Database<Model> {
         );
 
         return blocks.map((block) => ({ id: block.id }));
+    }
+
+    async updateSchema() {
+        await this._client.databases.update({
+            database_id: this._databaseId,
+            properties: this._schema.getProperties(),
+        });
     }
 }

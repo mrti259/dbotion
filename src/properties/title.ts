@@ -1,7 +1,9 @@
 import type { Filter, PageProperty } from '../types';
-import Property from './Property';
+import { Property } from './property';
 
-export default class TitleProperty extends Property<string> {
+export class TitleProperty extends Property<string> {
+    readonly type = 'title';
+
     protected _filter(value: string): Filter {
         return {
             property: this.name,

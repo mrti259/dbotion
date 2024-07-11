@@ -1,6 +1,6 @@
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 
-import type Property from './properties/Property';
+import type { Property } from './properties';
 import type {
     Filter,
     Identificable,
@@ -13,7 +13,7 @@ type Properties = {
 };
 
 type SchemaProperties<Model> = {
-    [Key in keyof Model]: Property<Model[Key]>;
+    [PropertyName in keyof Model]: Property<Model[PropertyName]>;
 };
 
 export class Schema<Model> {
@@ -22,9 +22,9 @@ export class Schema<Model> {
     buildFilterFrom(params: SearchParameters<Model>): Filter | null {
         const filters: Filter[] = [];
 
-        for (const name in params) {
-            const property = this.properties[name];
-            const values = params[name];
+        for (const propertyName in params) {
+            const property = this.properties[propertyName];
+            const values = params[propertyName];
             if (!property || !values) continue;
             const filter = property.filter(values);
             if (!filter) continue;
@@ -57,10 +57,21 @@ export class Schema<Model> {
 
         for (const propertyName in this.properties) {
             const property = this.properties[propertyName];
-            const pageProperty = properties[property.name]!;
+            const pageProperty = properties[property.name] || {};
             model[propertyName] = property.mapPageProperty(pageProperty) as any;
         }
 
         return model;
+    }
+
+    getProperties(): {} {
+        const properties = {} as Record<string, unknown>;
+
+        for (const propertyName in this.properties) {
+            const property = this.properties[propertyName];
+            properties[property.name] = property.emptyObject();
+        }
+
+        return properties;
     }
 }
