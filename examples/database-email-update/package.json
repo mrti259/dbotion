@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@notionhq/client": "^2.2.15",
-    "@sendgrid/mail": "^7.7.0",
+    "@sendgrid/mail": "^8.1.4",
     "dbotion": "^0.0.8",
     "dotenv": "^16.0.1",
     "ts-node": "^10.8.2"
